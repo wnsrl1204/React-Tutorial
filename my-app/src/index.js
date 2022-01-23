@@ -4,10 +4,11 @@ import './index.css'
 
 //함수 컴포넌트
 function Square(props) {
+    console.log(props.isLastPosition)
     // onClick은 인자로 함수를 받는다. onClick = {console.log('click')} 같은 오류를 범하기 쉽다.
     return (
         <button
-            className='square'
+            className={"square "+ (props.isLastPosition? "square-highlight":"")}
             onClick={props.onClick}
         >
             {props.value}
@@ -19,6 +20,7 @@ class Board extends React.Component {
     renderSquare(i) {
         return <Square
             value={this.props.squares[i]} 
+            isLastPosition={this.props.lastPosition === i}
             onClick={() => this.props.onClick(i)}// 네이밍 on[Event] handle[Event]
         />
     }
@@ -54,7 +56,7 @@ class Game extends React.Component {
         this.state = {
             history: [{
                 squares: Array(9).fill(null),
-                stepPosition: -1,
+                lastPosition: -1,
             }],
             stepNumber: 0,
             xIsNext: true,
@@ -74,7 +76,7 @@ class Game extends React.Component {
         this.setState({
             history: history.concat([{
                 squares: squares,
-                stepPosition: i,
+                lastPosition: i,
             }]),
             stepNumber: history.length,
             xIsNext: !this.state.xIsNext,
@@ -95,7 +97,7 @@ class Game extends React.Component {
 
         const moves = history.map((step, move) => {
             const status = (move % 2) === 1 ? 'X' : 'O';
-            const position = `(${Math.floor(step.stepPosition / 3)}, ${step.stepPosition % 3})`;
+            const position = `(${Math.floor(step.lastPosition / 3)}, ${step.lastPosition % 3})`;
             const desc = move ?
                 'Go to '+status+" "+position :
                 'Go to game Start';
@@ -118,6 +120,7 @@ class Game extends React.Component {
                 <div className='game-board'>
                     <Board 
                         squares={current.squares}
+                        lastPosition={current.lastPosition}
                         onClick={(i) => this.handleClick(i)}
                     />
                 </div>
