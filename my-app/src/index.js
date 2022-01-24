@@ -26,25 +26,43 @@ class Board extends React.Component {
     }
 
     render() {
+        const board = (() => {
+            const boardRaw = 3;
+            const boardColumn = 3;
+            const squares = Array.from({length: boardRaw*boardColumn}
+                , (_, i) => this.renderSquare(i));
+
+            const boardRawArr = []; 
+            // [
+            //     [this.renderSquare(0), this.renderSquare(1), this.renderSquare(2)],
+            //     [this.renderSquare(3), this.renderSquare(4), this.renderSquare(5)],
+            //     [this.renderSquare(6), this.renderSquare(7), this.renderSquare(8)],
+            // ] 최종  형태
+            
+            const result = [];
+            // [
+            //     (<div className='board-row' key={0}>{boardRawArr[0]}</div>),
+            //     (<div className='board-row' key={1}>{boardRawArr[1]}</div>),
+            //     (<div className='board-row' key={2}>{boardRawArr[2]}</div>),
+            // ]  최종 형태
+            
+            let index = 0;
+
+            for(let i = 0; i < boardRaw; i++) {
+                boardRawArr.push([]);
+
+                for(let j = 0; j < boardColumn; j++) {
+                    boardRawArr[i].push(squares[index++])
+                }
+                
+                result.push((<div className='board-row' key={i}>{boardRawArr[i]}</div>));
+            }
+            return result;
+        })()
+
         return (
             <div>
-                <div className='board-row'>
-                    {this.renderSquare(0)}
-                    {this.renderSquare(1)}
-                    {this.renderSquare(2)}
-                </div>
-                <div className='board-row'>
-                    {this.renderSquare(3)}
-                    {this.renderSquare(4)}
-                    {this.renderSquare(5)}
-                </div>
-                <div className='board-row'>
-                    {this.renderSquare(6)}
-                    {this.renderSquare(7)}
-                    {this.renderSquare(8)}
-                </div>
-
-
+                {board}
             </div>
         )
     }
