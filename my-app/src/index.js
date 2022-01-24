@@ -8,7 +8,7 @@ function Square(props) {
     // onClick은 인자로 함수를 받는다. onClick = {console.log('click')} 같은 오류를 범하기 쉽다.
     return (
         <button
-            className={"square "+ (props.isLastPosition? "square-highlight":"")}
+            className={"square "+ (props.highlight? "square-highlight":"")}
             onClick={props.onClick}
         >
             {props.value}
@@ -17,10 +17,15 @@ function Square(props) {
 }
 
 class Board extends React.Component {
+
+
     renderSquare(i) {
+        const highlight = (this.props.lastPosition === i) || (this.props.winner?.position.includes(i));
+
+
         return <Square
             value={this.props.squares[i]} 
-            isLastPosition={this.props.lastPosition === i}
+            highlight={highlight}
             onClick={() => this.props.onClick(i)}// 네이밍 on[Event] handle[Event]
         />
     }
@@ -119,6 +124,7 @@ class Game extends React.Component {
         const current = history[this.state.stepNumber];
         const winner = calculateWinner(current.squares);
         const sortToggleDesc = areMovesSortedInAsc ? "DESC" : "ASC"
+        const AreNotAllSquaresNull = !current.squares.includes(null);
 
         const moves = ((items)=> {
                 return  areMovesSortedInAsc ? items : items.reverse();
@@ -140,7 +146,9 @@ class Game extends React.Component {
 
         let status;
         if(winner) {
-            status = 'Winner: '+winner;
+            status = 'Winner: '+winner.user;
+        } else if(AreNotAllSquaresNull) {
+            status =  'Draw'
         } else {
             status = 'Next player: ' +(this.state.xIsNext ? 'X' : 'O');
         }
@@ -150,6 +158,7 @@ class Game extends React.Component {
                 <div className='game-board'>
                     <Board 
                         squares={current.squares}
+                        winner={winner}
                         lastPosition={current.lastPosition}
                         onClick={(i) => this.handleClick(i)}
                     />
@@ -202,7 +211,10 @@ function calculateWinner(squares) {
     for(let i = 0; i < lines.length; i++) {
         const [a, b, c] = lines[i];
         if(squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
-            return squares[a];
+            return {
+                user: squares[a],
+                position: [a, b, c],
+            };
         }
     }
 
