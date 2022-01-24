@@ -29,8 +29,6 @@ class Board extends React.Component {
         const board = (() => {
             const boardRaw = 3;
             const boardColumn = 3;
-            const squares = Array.from({length: boardRaw*boardColumn}
-                , (_, i) => this.renderSquare(i));
 
             const boardRawArr = []; 
             // [
@@ -52,7 +50,7 @@ class Board extends React.Component {
                 boardRawArr.push([]);
 
                 for(let j = 0; j < boardColumn; j++) {
-                    boardRawArr[i].push(squares[index++])
+                    boardRawArr[i].push(this.renderSquare(index++))
                 }
                 
                 result.push((<div className='board-row' key={i}>{boardRawArr[i]}</div>));
