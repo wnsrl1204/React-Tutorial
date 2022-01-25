@@ -4,7 +4,7 @@ import './index.css'
 
 //함수 컴포넌트
 function Square(props) {
-    console.log(props.isLastPosition)
+    console.log(props.highlight)
     // onClick은 인자로 함수를 받는다. onClick = {console.log('click')} 같은 오류를 범하기 쉽다.
     return (
         <button
@@ -24,6 +24,7 @@ class Board extends React.Component {
 
 
         return <Square
+            key={i}
             value={this.props.squares[i]} 
             highlight={highlight}
             onClick={() => this.props.onClick(i)}// 네이밍 on[Event] handle[Event]
