@@ -4,7 +4,6 @@ import './index.css'
 
 //함수 컴포넌트
 function Square(props) {
-    console.log(props.highlight)
     // onClick은 인자로 함수를 받는다. onClick = {console.log('click')} 같은 오류를 범하기 쉽다.
     return (
         <button
